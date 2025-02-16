@@ -1,0 +1,17 @@
+FROM oven/bun:1
+
+ARG DB_URL
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN bun install
+
+RUN bun run generate:db
+RUN DB_URL=$DB_URL bunx turbo build --filter=web...
+
+EXPOSE 3000
+
+# Start the frontend application
+CMD ["bun", "start:frontend"]
